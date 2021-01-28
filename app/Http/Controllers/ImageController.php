@@ -18,7 +18,7 @@ class ImageController extends Controller
             $image = new ImageService($request->file('image')->getContent());
             $image->modifyImage()->getImage();
         } catch (\Throwable $exception) {
-            return redirect()->back()->with(['errors' => $exception->getMessage()]);
+            return redirect()->back()->withErrors(['errors', $exception->getMessage()]);
         }
         return $image->render();
     }
