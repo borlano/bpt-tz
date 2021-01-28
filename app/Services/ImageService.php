@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 
+use ColorThief\ColorThief;
 use Exception;
 use Throwable;
 
@@ -88,14 +89,20 @@ class ImageService
      */
     private function getDominantColor(): string
     {
-        for ($x = 0; $x < imagesx($this->image); $x++) {
-            for ($y = 0; $y < imagesy($this->image); $y++) {
-                $rgb = imagecolorat($this->image, $x, $y);
-                $this->counters[self::RED_COLOR] += ($rgb >> 16) & 0xFF;
-                $this->counters[self::GREEN_COLOR] += ($rgb >> 8) & 0xFF;
-                $this->counters[self::BLUE_COLOR] += $rgb & 0xFF;
-            }
-        }
+//        for ($x = 0; $x < imagesx($this->image); $x++) {
+//            for ($y = 0; $y < imagesy($this->image); $y++) {
+//                $rgb = imagecolorat($this->image, $x, $y);
+//                $this->counters[self::RED_COLOR] += ($rgb >> 16) & 0xFF;
+//                $this->counters[self::GREEN_COLOR] += ($rgb >> 8) & 0xFF;
+//                $this->counters[self::BLUE_COLOR] += $rgb & 0xFF;
+//            }
+//        }
+
+        [
+            $this->counters[self::RED_COLOR],
+            $this->counters[self::GREEN_COLOR],
+            $this->counters[self::BLUE_COLOR]
+        ] = ColorThief::getColor($this->image);
 
         return array_search(max($this->counters), $this->counters);
     }
