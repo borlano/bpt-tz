@@ -14,16 +14,12 @@ class ImageController extends Controller
 
     public function changeImage(ImageRequest $request)
     {
-        if ($request->has('image')) {
+        try {
             $image = new ImageService($request->file('image')->getContent());
-            try {
-                $image->modifyImage()->getImage();
-            } catch (\Throwable $exception) {
-                return $exception->getMessage();
-            }
-            return $image->render();
+            $image->modifyImage()->getImage();
+        } catch (\Throwable $exception) {
+            return redirect()->back()->with(['errors' => $exception->getMessage()]);
         }
-
-        return 'No image';
+        return $image->render();
     }
 }

@@ -12,7 +12,16 @@
     <form class="m-5" action="{{ route('image') }}" method="post" enctype="multipart/form-data">
         @csrf
         <label for="image">Выберите изображение</label>
-        <input class="form-control-file" type="file" name="image" accept="image/jpeg">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <input class="form-control-file" type="file" name="image">
         <input class="form-control btn-block" type="submit">
     </form>
 </div>
